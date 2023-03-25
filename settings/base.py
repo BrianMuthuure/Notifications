@@ -28,7 +28,8 @@ except FileNotFoundError:
 
 # Raise an exception if the secret key couldn't be obtained or saved
 if not SECRET_KEY:
-    raise Exception(f"Could not read or generate the secret key from {SECRET_FILE_PATH}!")
+    raise Exception(
+        f"Could not read or generate the secret key from {SECRET_FILE_PATH}!")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
