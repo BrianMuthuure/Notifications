@@ -37,9 +37,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+sys.path.append(normpath(join(DJANGO_ROOT, 'apps')))
+
 # Application definition
 
-DJANGO_APPLICATIONS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,23 +50,21 @@ DJANGO_APPLICATIONS = [
     'django.contrib.staticfiles',
 ]
 
-LOCAL_APPLICATIONS = [
+LOCAL_APPS = [
     'apps.fcm_app',
     'apps.bell',
     'apps.emails',
-    'apps.slack'
+    'apps.slack',
 ]
 
-THIRD_PARTY_APPLICATIONS = [
+THIRD_PARTY_APPS = [
     'rest_framework',
     'drf_yasg',
 ]
 
-INSTALLED_APPS = DJANGO_APPLICATIONS + LOCAL_APPLICATIONS + THIRD_PARTY_APPLICATIONS
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 SITE_ID = 1
-
-sys.path.append(normpath(join(DJANGO_ROOT, 'apps')))
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,7 +78,6 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-ROOT_URLCONF = f"{SITE_NAME}.urls"
 
 TEMPLATES = [
     {
@@ -96,7 +95,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = f"{SITE_NAME}.wsgi.application"
+WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
+
+ROOT_URLCONF = '%s.urls' % SITE_NAME
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
