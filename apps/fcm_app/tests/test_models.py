@@ -1,8 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-
+from apps.common.test_data import user_data, device_data
 from apps.fcm_app.models import FCMDevice, DeviceType
-from apps.fcm_app.tests.test_data import user_data, device_data
 
 
 class FCMDeviceModelTestCase(TestCase):
