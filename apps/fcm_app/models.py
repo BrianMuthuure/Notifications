@@ -11,7 +11,7 @@ class Device(models.Model):
     active = models.BooleanField(
         verbose_name=_("Is active"),
         default=True,
-        help_text=_("Inactive devices will not be sent notifications"))
+        help_text=_("Inactive devices will not be sent notify"))
     user = models.ForeignKey(
         User, blank=True, null=True, on_delete=models.CASCADE,
         related_query_name=_("fcmdevice"), )

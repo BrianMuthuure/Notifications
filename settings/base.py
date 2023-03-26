@@ -13,6 +13,8 @@ PROJECT_ROOT = dirname(DJANGO_ROOT)
 
 SITE_NAME = basename(DJANGO_ROOT)
 
+sys.path.append(normpath(join(DJANGO_ROOT, 'apps')))
+
 # Define the path to the secret file
 SECRET_FILE_PATH = normpath(join(DJANGO_ROOT, 'secret_file.txt'))
 
@@ -37,11 +39,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-sys.path.append(normpath(join(DJANGO_ROOT, 'apps')))
 
 # Application definition
 
-DJANGO_APPS = [
+DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -62,9 +63,34 @@ THIRD_PARTY_APPS = [
     'drf_yasg',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = DEFAULT_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 SITE_ID = 1
+
+
+# swagger settings
+REDOC_SETTINGS = {'LAZY_RENDERING': False}
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'DEFAULT_FIELD_INSPECTORS': [
+        'drf_yasg.inspectors.CamelCaseJSONFilter',
+        'drf_yasg.inspectors.InlineSerializerInspector',
+        'drf_yasg.inspectors.RelatedFieldInspector',
+        'drf_yasg.inspectors.ChoiceFieldInspector',
+        'drf_yasg.inspectors.FileFieldInspector',
+        'drf_yasg.inspectors.DictFieldInspector',
+        'drf_yasg.inspectors.SimpleFieldInspector',
+        'drf_yasg.inspectors.StringDefaultFieldInspector',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -95,9 +121,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
+WSGI_APPLICATION = f"{SITE_NAME}.wsgi.application"
 
-ROOT_URLCONF = '%s.urls' % SITE_NAME
+ROOT_URLCONF = f"{SITE_NAME}.urls"
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -164,7 +190,7 @@ FCM_DJANGO_SETTINGS = {
     # true if you want to have only one active device per registered user at a time
     # default: False
     "ONE_DEVICE_PER_USER": False,
-    # devices to which notifications cannot be sent,
+    # devices to which notify cannot be sent,
     # are deleted upon receiving error response from FCM
     # default: False
     "DELETE_INACTIVE_DEVICES": False,

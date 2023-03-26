@@ -1,0 +1,25 @@
+from django.db.models import TextChoices
+
+
+class EmailType(TextChoices):
+    SUCCESSFUL_INVESTMENT = 'successful_investment', 'Successful Investment'
+    EMAIL_VERIFICATION = 'email_verification', 'Email Verification'
+    PASSWORD_RESET = 'password_reset', 'Password Reset'
+    PASSWORD_CREATE = 'password_create', 'Password Create'
+    SUCCESSFUL_ACCREDITATION = 'successful_accreditation', 'Successful Accreditation'
+    FAILED_ACCREDITATION = 'failed_accreditation', 'Failed Accreditation'
+    PASSWORD_CHANGED = 'password_changed', 'Password Changed'
+    COMPLETE_ACCOUNT = 'complete_account', 'Complete Account'
+    KYC_REMINDER = 'kyc_reminder', 'KYC Reminder'
+    START_INVESTING = 'start_investing', 'Start Investing'
+    ACCREDITATION_NUDGE = 'accreditation_nudge', 'Accreditation Nudge'
+    PENDING_PURCHASE = 'pending_purchase', 'Pending Purchase'
+    ROLLOVER_ON_REMINDER_ONE = 'rollover_on_reminder_one', 'Rollover on Reminder One'
+    ROLLOVER_ON_REMINDER_TWO = 'rollover_on_reminder_two', 'Rollover on Reminder Two'
+    NUDGE_ONE = 'nudge_one', 'Nudge One'
+    NUDGE_TWO = 'nudge_two', 'Nudge Two'
+    CONFIRM_ACH_INVESTMENT = 'confirm_ach_investment', 'Confirm ACH Investment'
+    FAILED_ACH_TRANSFER = 'failed_ach_transfer', 'Failed ACH Transfer'
+    PROVIDE_BANK_DETAILS = 'provide_bank_details', 'Provide Bank Details'
+    BANK_DETAILS_PRESENT = 'bank_details_present', 'Bank Details Present'
+    BANK_DETAILS_ABSENT = 'bank_details_absent', 'Bank Details Absent'
