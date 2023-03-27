@@ -1,6 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+from django.db.models import JSONField
+
+from apps.common.enums import SourceTypes
+from apps.common.models import SharedModel
 
 
 class Device(models.Model):
@@ -58,3 +62,58 @@ class FCMDevice(Device):
                 getattr(self, "device_id")
                 or "")
                 or f"{self.__class__.__name__} for {self.user or 'unknown user'}")
+
+
+class NotificationTemplate(SharedModel):
+    id = models.AutoField(
+        verbose_name=_("Notification template ID"),
+        primary_key=True,
+        auto_created=True,
+    )
+    message = models.TextField(
+        max_length=1000,
+        verbose_name=_("message"),
+        blank=True,
+    )
+
+    details = JSONField(
+        encoder=None,
+        blank=True,
+        null=True
+    )
+    source = models.CharField(
+        choices=SourceTypes.choices,
+        default=SourceTypes.DEFAULT,
+        max_length=255,
+        verbose_name=_("source_type"),
+        help_text=_(
+            "Identifies the entity associated "
+            "with the notification. service identity"
+        )
+    )
+    source_type = models.CharField(
+        max_length=1000,
+        verbose_name=_("source_type"),
+        blank=True,
+        help_text=_(
+            "The description for the source. "
+            "i.e. Maturity follow up Auto-renew ON "
+        )
+    )
+    status = models.BooleanField(
+        verbose_name=_("Is Active"),
+        default=False,
+        help_text=_("True or False"),
+    )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['source']),
+            models.Index(fields=['source_type']),
+        ]
+        verbose_name = _('Notification Template')
+        verbose_name_plural = _('Notification Templates')
+
+    def __str__(self):
+        return f"{self.id}: {self.source}" \
+            if self.id else "unknown template"

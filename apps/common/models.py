@@ -2,8 +2,7 @@ from django.db import models
 from django.db.models import JSONField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
-from apps.common.enums import NotificationTypes
+from .enums import NotificationTypes
 
 
 class SharedModel(models.Model):
