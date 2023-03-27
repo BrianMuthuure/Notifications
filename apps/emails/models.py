@@ -1,7 +1,11 @@
 from django.db import models
-from ..common.models import SharedModel
+
+from ..common.enums import NotificationStatuses
+from ..common.models import SharedModel, Notification
 from django.contrib.auth.models import User
 from .enums import EmailType
+from ..fcm_app.models import NotificationTemplate
+from django.utils.translation import gettext_lazy as _
 
 
 class UserEmailLogs(SharedModel):
@@ -26,9 +30,29 @@ class UserEmailLogs(SharedModel):
         indexes = [
             models.Index(fields=["-created_at"])
         ]
-        verbose_name = "User email log"
-        verbose_name_plural = "User email logs"
+        verbose_name = _("User email log")
+        verbose_name_plural = _("User email logs")
 
     def __str__(self):
         return f"{self.user.first_name} - {self.email_type}"
 
+
+class EmailNotification(Notification):
+    template = models.ForeignKey(
+        NotificationTemplate,
+        on_delete=models.CASCADE,
+        related_name="email_templates"
+    )
+    status = models.CharField(
+        choices=NotificationStatuses.choices,
+        default=NotificationStatuses.PENDING,
+        max_length=100
+    )
+
+    class Meta:
+        indexes = [models.Index(fields=["status"])]
+        verbose_name = _("Email Notification")
+        verbose_name_plural = _("Email Notifications")
+
+    def __str__(self):
+        return f"{self.id} {self.type}"

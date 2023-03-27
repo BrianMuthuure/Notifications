@@ -1,8 +1,15 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from apps.common.test_data import user_data, email_log_data
+
+from apps.common.enums import NotificationStatuses
+from apps.common.test_data import (
+    user_data,
+    email_log_data,
+    notification_template_data
+)
 from apps.emails.enums import EmailType
-from apps.emails.models import UserEmailLogs
+from apps.emails.models import UserEmailLogs, EmailNotification
+from apps.fcm_app.models import NotificationTemplate
 
 
 class UserEmailLogsModelTestCase(TestCase):
@@ -41,3 +48,51 @@ class UserEmailLogsModelTestCase(TestCase):
     def test_email_log_verbose_names(self):
         self.assertEqual(UserEmailLogs._meta.verbose_name, 'User email log')
         self.assertEqual(UserEmailLogs._meta.verbose_name_plural, 'User email logs')
+
+
+class EmailNotificationTestCase(TestCase):
+
+    def setUp(self):
+        self.template = NotificationTemplate.objects.create(**notification_template_data)
+
+    def test_str_representation(self):
+        email_notification = EmailNotification.objects.create(
+            template=self.template,
+            status=NotificationStatuses.PENDING
+        )
+        self.assertEqual(
+            str(email_notification),
+            f"{email_notification.id} Email Notification"
+        )
+
+    def test_template_relationship(self):
+        email_notification = EmailNotification.objects.create(
+            template=self.template,
+            status=NotificationStatuses.PENDING
+        )
+        self.assertEqual(email_notification.template, self.template)
+
+    def test_default_status(self):
+        email_notification = EmailNotification.objects.create(
+            template=self.template
+        )
+        self.assertEqual(
+            email_notification.status,
+            NotificationStatuses.PENDING
+        )
+
+    def test_valid_status_choices(self):
+        email_notification = EmailNotification.objects.create(
+            template=self.template,
+            status=NotificationStatuses.SENT
+        )
+        self.assertIn(
+            email_notification.status,
+            [s[0] for s in NotificationStatuses.choices]
+        )
+
+    def test_verbose_name_plural(self):
+        self.assertEqual(
+            str(EmailNotification._meta.verbose_name_plural),
+            "Email Notifications"
+        )
